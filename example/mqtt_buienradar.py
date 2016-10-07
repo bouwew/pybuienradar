@@ -13,7 +13,6 @@ offset = 3600
 latitude = 52.151682
 longitude = 6.064496
 buienradar = pybuienradar.rainprediction(latitude, longitude)
-prediction = buienradar.calculatetotalandaverage(offset)
 
 # MQTT
 client = paho.Client()
@@ -23,5 +22,7 @@ client.connect("mqttbroker", 1883)
 client.loop_start()
 
 while True:
+    now = time.strftime("%H:%M")
+    prediction = buienradar.calculatetotalandaverage(now, offset)
     (rc, mid) = client.publish("buienradar/prediction", json.dumps((prediction), sort_keys=True), qos=1)
     time.sleep(600)

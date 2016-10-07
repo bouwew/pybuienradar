@@ -22,7 +22,7 @@ class rainprediction(buienradar):
             (val,key) = line.split("|")
             prediction[(key)] = val
         return (prediction)
-    def calculatetotalandaverage(self, offset):
+    def calculatetotalandaverage(self, now, offset):
         '''
         This will calculate the total and average rainfall for the given timeframe (now + offset)
         Averages are per 5 minutes within the timeframe
@@ -30,7 +30,6 @@ class rainprediction(buienradar):
         -- When needed, mm/h can be calculated by 10^((value -109)/32) (example: 77 = 0.1 mm/hour)
         '''
         willitrain = self.getprediction()
-        now = time.strftime("%H:%M")
         int_totalrain = 0
         int_averagerain = 0
         int_numberoflines = 0
