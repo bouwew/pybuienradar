@@ -12,3 +12,6 @@ forecast = buienradar.get_forecast(now,timeframe)
 
 print (forecast_data)
 print (forecast)
+
+mm = round(10**((forecast['averagerain'] - 109)/32),2)
+print (mm)
