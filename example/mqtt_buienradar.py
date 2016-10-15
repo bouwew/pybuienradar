@@ -6,13 +6,13 @@ import json
 
 def on_publish(client, userdata, mid):
     print("mid: "+str(mid))
-    print(json.dumps(prediction))
+    print(json.dumps(forecast))
 
 # pybuienradar
-offset = 3600
+timeframe = 3600
 latitude = 52.151682
 longitude = 6.064496
-buienradar = pybuienradar.rainprediction(latitude, longitude)
+buienradar = pybuienradar.forecast(latitude, longitude)
 
 # MQTT
 client = paho.Client()
@@ -23,6 +23,6 @@ client.loop_start()
 
 while True:
     now = time.strftime("%H:%M")
-    prediction = buienradar.calculatetotalandaverage(now, offset)
-    (rc, mid) = client.publish("buienradar/prediction", json.dumps((prediction), sort_keys=True), qos=1)
+    forecast = buienradar.get_forecast(now, timeframe)
+    (rc, mid) = client.publish("buienradar/forecast", json.dumps((forecast), sort_keys=True), qos=1)
     time.sleep(600)
