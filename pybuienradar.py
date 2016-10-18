@@ -13,21 +13,19 @@ class forecast(buienradar):
         self._url = "http://gadgets.buienradar.nl/data/raintext?lat=%s&lon=%s"
     def get_forecast_data(self):
         '''
-        This will get the list with rain predictions for a GPS location and transform them into a python dictionary
+        This will get the list with rain predictions in mm/h for a GPS location and transform them into a python dictionary
         Instantiate the class with gps latitude and longitude in decimal degrees notation
         '''
         data = urlopen(self._url % (self._latitude, self._longitude)).read().decode()
         forecast = {}
         for line in data.splitlines():
             (val,key) = line.split("|")
-            forecast[(key)] = val
+            mm = 10**((int(val) - 109)/32)
+            forecast[(key)] = mm
         return (forecast)
     def get_forecast(self, now, timeframe):
         '''
-        This will return the total and average rainfall for the given timefram (now + timeframe)
-        Averages are per 5 minutes within the timeframe
-        0 is no rain, 255 is very heavy rain
-        -- When needed, mm/h can be calculated by 10^((value -109)/32) (example: 77 = 0.1 mm/hour)
+        This will return the total and average rainfall in mm/h for the given timeframe (now + timeframe)
         '''
         data = self.get_forecast_data()
         totalrain = 0
@@ -38,7 +36,7 @@ class forecast(buienradar):
             if tdelta.days < 0:
                 tdelta = timedelta(days=0,seconds=tdelta.seconds, microseconds=tdelta.microseconds)
             if tdelta.seconds > 0 and tdelta.seconds <= timeframe:
-                totalrain = totalrain + int(data[key])
+                totalrain = totalrain + float(data[key])
                 numberoflines = numberoflines + 1
-                averagerain = totalrain / numberoflines
-        return ({'time': now, 'timeframe': timeframe, 'totalrain': totalrain, 'averagerain': averagerain})
+                averagerain = round((totalrain / numberoflines),2)
+        return ({'time': now, 'timeframe': timeframe, 'totalrain': round((totalrain),2), 'averagerain': averagerain})

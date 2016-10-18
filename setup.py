@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='pybuienradar',
-    version='0.4', # Should be updated with new versions
+    version='0.5', # Should be updated with new versions
     author='Koen Erens',
     author_email='koen.erens@gmail.com',
     py_modules=['pybuienradar'],
