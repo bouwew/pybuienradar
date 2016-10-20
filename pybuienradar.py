@@ -1,6 +1,10 @@
+"""
+This module provides an easy way to get precipitation forecast data from www.buienradar.nl and does not require
+anything else then standard python3 libraries.
+"""
+
 from urllib.request import urlopen
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 import time
 
 class buienradar():
@@ -13,7 +17,8 @@ class forecast(buienradar):
         self._url = "http://gadgets.buienradar.nl/data/raintext?lat=%s&lon=%s"
     def get_forecast_data(self):
         '''
-        This will get the list with rain predictions in mm/h for a GPS location and transform them into a python dictionary
+        This will get a list with precipitation predictions from www.buienradar.nl for a GPS location
+        and returns them in a python dictionary.
         Instantiate the class with gps latitude and longitude in decimal degrees notation
         '''
         data = urlopen(self._url % (self._latitude, self._longitude)).read().decode()
