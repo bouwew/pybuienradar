@@ -26,7 +26,8 @@ class forecast(buienradar):
         for line in data.splitlines():
             (val,key) = line.split("|")
             mm = 10**((int(val) - 109)/32)
-            forecast[(key)] = mm
+            mm_r = round(mm, 2)
+            forecast[(key)] = mm_r
         return (forecast)
     def get_forecast(self, now, timeframe):
         '''
@@ -41,7 +42,7 @@ class forecast(buienradar):
             if tdelta.days < 0:
                 tdelta = timedelta(days=0,seconds=tdelta.seconds, microseconds=tdelta.microseconds)
             if tdelta.seconds > 0 and tdelta.seconds <= timeframe:
-                totalrain = totalrain + float(data[key])
+                totalrain = totalrain + (float(data[key])/12)
                 numberoflines = numberoflines + 1
                 averagerain = round((totalrain / numberoflines),2)
         return ({'time': now, 'timeframe': timeframe, 'totalrain': round((totalrain),2), 'averagerain': averagerain})
